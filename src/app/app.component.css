@@ -1,0 +1,26 @@
+.full-width {
+  width: 100%;
+  max-width: 500px;
+  display: block;
+}
+
+.bold {
+  font-weight: 600;
+}
+
+.right {
+  text-align: right;
+}
+
+table {
+  border: 1px solid #dee2e6;
+  border-collapse: collapse;
+  width: 100%;
+  max-width: 800px;
+}
+
+td {
+  padding: 1em;
+  margin: 0;
+  border: 1px solid #dee2e6;
+}

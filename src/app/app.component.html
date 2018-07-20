@@ -1,0 +1,237 @@
+<div>
+  <div class="main-container">
+    <form [formGroup]="form" *ngIf="!(submitted$ | async)" novalidate>
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>Shitty closeout</mat-card-title>
+        </mat-card-header>
+      </mat-card>
+      <mat-card *ngIf="(step$ | async) === 1">
+        <mat-card-header>
+          <mat-card-title>Ticket Sales</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <mat-form-field class="full-width">
+            <input type="number" [formControl]="form.controls.onlineSales" matInput placeholder="Brown Paper Tickets Sales">
+          </mat-form-field>
+          <mat-form-field class="full-width">
+            <input type="number" [formControl]="form.controls.doorSales" matInput placeholder="Door Sales">
+          </mat-form-field>
+          <button mat-raised-button color="secondary" (click)="setStep(2)">Next</button>
+        </mat-card-content>
+      </mat-card>
+      <mat-card *ngIf="(step$ | async) === 2">
+        <mat-card-header>
+          <mat-card-title>Expenses</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <mat-form-field class="full-width">
+            <input type="number" [formControl]="form.controls.bandPayment" matInput placeholder="Performer Payment">
+          </mat-form-field>
+          <mat-form-field class="full-width">
+            <input type="number" [formControl]="form.controls.doorPayment" matInput placeholder="Door Payment">
+          </mat-form-field>
+          <mat-form-field class="full-width">
+            <input type="number" [formControl]="form.controls.barPayment" matInput placeholder="Bar Payment">
+          </mat-form-field>
+          <mat-form-field class="full-width">
+            <input type="number" [formControl]="form.controls.parkingPayment" matInput placeholder="Parking Payment">
+          </mat-form-field>
+          <mat-form-field class="full-width">
+            <input type="number" [formControl]="form.controls.soundPayment" matInput placeholder="Sound Payment">
+          </mat-form-field>
+          <mat-form-field class="full-width">
+            <input type="number" [formControl]="form.controls.photographyPayment" matInput placeholder="Photography Payment">
+          </mat-form-field>
+          <mat-form-field class="full-width">
+            <input type="number" [formControl]="form.controls.otherPayment" matInput placeholder="Other Payment">
+          </mat-form-field>
+          <button mat-raised-button color="secondary" (click)="setStep(1)">Previous</button>
+          <button mat-raised-button color="secondary" (click)="setStep(3)">Next</button>
+        </mat-card-content>
+      </mat-card>
+      <mat-card *ngIf="(step$ | async) === 3">
+        <mat-card-header>
+          <mat-card-title>Bank</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <mat-form-field class="full-width">
+            <input type="number" [formControl]="form.controls.totalWithdrawal" matInput placeholder="Total Bank Withdrawal">
+          </mat-form-field>
+          <mat-form-field class="full-width">
+            <input type="number" [formControl]="form.controls.barBank" matInput placeholder="Bar Bank">
+          </mat-form-field>
+          <mat-form-field class="full-width">
+            <input type="number" [formControl]="form.controls.bandDeposit" matInput placeholder="Band Deposit paid">
+          </mat-form-field>
+          <button mat-raised-button color="secondary" (click)="setStep(2)">Previous</button>
+          <button mat-raised-button color="secondary" (click)="setStep(4)">Next</button>
+        </mat-card-content>
+      </mat-card>
+      <mat-card *ngIf="(step$ | async) === 4">
+        <mat-card-header>
+          <mat-card-title>Bar/Merch Sales</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <mat-form-field class="full-width">
+            <input type="number" [formControl]="form.controls.merchSales" matInput placeholder="Merch Sales">
+          </mat-form-field>
+          <mat-form-field class="full-width">
+            <input type="number" [formControl]="form.controls.posterSales" matInput placeholder="Poster Sales">
+          </mat-form-field>
+          <mat-form-field class="full-width">
+            <input type="number" [formControl]="form.controls.barSales" matInput placeholder="Total Bar Sales">
+          </mat-form-field>
+          or
+          <mat-form-field class="full-width">
+            <input type="number" [formControl]="form.controls.totalDeposit" matInput placeholder="Total Bank Deposit (cash in hand after expenses)">
+          </mat-form-field>
+          <button mat-raised-button color="secondary" (click)="setStep(3)">Previous</button>
+          <button mat-raised-button color="primary" (click)="submit()">Submit</button>
+        </mat-card-content>
+      </mat-card>
+
+    </form>
+
+    <mat-card *ngIf="submitted$ | async">
+      <h3>Tickets</h3>
+      <table>
+        <tr>
+          <td>BPT Tickets (Online Sales)</td>
+          <td>{{onlineSales$ | async}}</td>
+        </tr>
+        <tr>
+          <td>Door Tickets</td>
+          <td>{{doorSales$ | async}}</td>
+        </tr>
+        <tr>
+          <td class="bold right">Total Ticket Receipts</td>
+          <td class="bold">{{totalTicketsSold$ | async}}</td>
+        </tr>
+        <tr>
+          <td class="bold right">Ticket Sales</td>
+          <td class="bold">{{ticketSales$ | async}}</td>
+        </tr>
+        <tr>
+          <td class="bold right">Ticket Sales Tax</td>
+          <td class="bold">{{ticketSalesTax$ | async}}</td>
+        </tr>
+      </table>
+
+      <h3>Expenses</h3>
+      <table>
+        <tr>
+          <td>Performers (minus band deposit)</td>
+          <td>{{ bandPayment$ | async}}</td>
+        </tr>
+        <tr>
+          <td>door</td>
+          <td>{{ doorPayment$ | async}}</td>
+        </tr>
+        <tr>
+          <td>parking
+          </td>
+          <td>{{ parkingPayment$ | async}}</td>
+        </tr>
+        <tr>
+          <td>bar</td>
+          <td>{{ barPayment$ | async}}</td>
+        </tr>
+        <tr>
+          <td>sound</td>
+          <td>{{ soundPayment$ | async}}</td>
+        </tr>
+        <tr>
+          <td>photo</td>
+          <td>{{ photographyPayment$ | async}}</td>
+        </tr>
+        <tr>
+          <td>other</td>
+          <td>{{ otherPayment$ | async}}</td>
+        </tr>
+        <tr>
+          <td class="bold right">Total Expenses</td>
+          <td class="bold">{{ totalExpenses$ | async}}</td>
+        </tr>
+      </table>
+
+      <h3>Bar &amp; Merch</h3>
+      <table>
+        <tr>
+          <td>Bar Bank</td>
+          <td>{{ barBank$ | async}}</td>
+        </tr>
+        <tr>
+          <td>Bar Count</td>
+          <td>{{ barSales$ | async}}</td>
+        </tr>
+        <tr>
+          <td>Merch</td>
+          <td>{{ merchSales$ | async}}</td>
+        </tr>
+        <tr>
+          <td>Posters</td>
+          <td>{{ posterSales$ | async}}</td>
+        </tr>
+        <tr>
+          <td class="bold right">Total Bar Merch Receipts</td>
+          <td class="bold">{{ barMerchReceipts$ | async}}</td>
+        </tr>
+        <tr>
+          <td class="bold right">Bar/merch Sales</td>
+          <td class="bold">{{ barMerchSales$ | async}}</td>
+        </tr>
+        <tr>
+          <td class="bold right">Bar/merch Sales Tax</td>
+          <td class="bold">{{ barMerchTax$ | async}}</td>
+        </tr>
+      </table>
+
+      <h3>Cash Deposit</h3>
+      <table>
+        <tr>
+          <td>Door Tickets</td>
+          <td>{{ doorPayment$ | async}}</td>
+        </tr>
+        <tr>
+          <td>Bar &amp; Merch</td>
+          <td>{{ barMerchReceipts$ | async}}</td>
+        </tr>
+        <tr>
+          <td>Total Bank Withdrawal</td>
+          <td>{{ totalWithdrawal$ | async}}</td>
+        </tr>
+        <tr>
+          <td>Expenses</td>
+          <td>({{ totalExpenses$ | async}})</td>
+        </tr>
+        <tr>
+          <td class="bold right">Total Deposit</td>
+          <td class="bold">{{ totalDeposit$ | async}}</td>
+        </tr>
+      </table>
+
+      <h3>Show Profit / Loss</h3>
+      <table>
+        <tr>
+          <td>Total Sales</td>
+          <td>{{ totalSales$ | async }}</td>
+        </tr>
+        <tr>
+          <td>Total Expenses</td>
+          <td>({{ totalExpenses$ | async }})</td>
+        </tr>
+        <tr>
+          <td>Band Deposits Paid</td>
+          <td>({{ bandDeposit$ | async }})</td>
+        </tr>
+        <tr>
+          <td class="bold right">Net Remaining</td>
+          <td class="bold">{{ totalProfit$ | async }}</td>
+        </tr>
+      </table>
+
+      <button mat-raised-button color="primary" (click)="revise()" style="margin-top: 2em;">Go back and edit</button>
+    </mat-card>
+  </div>
+</div>
