@@ -1,4 +1,4 @@
-import { Submit } from './closeout-form.actions';
+import { Submit, Revise } from './closeout-form.actions';
 import { closeoutFormReducer } from './closeout-form.reducer';
 import {
   closeoutTest1,
@@ -88,23 +88,55 @@ describe('state 5', () => {
 describe('state 6', () => {
   const state = closeoutTest6;
   it('should return true', () => {
-    const action = new Submit();
-    const newState = closeoutFormReducer(state, action);
+    const submitAction = new Submit();
+    const reviseAction = new Revise();
+    const newState = closeoutFormReducer(state, submitAction);
+
     expect(newState.totalSales).toEqual(3596.21);
     expect(newState.totalDeposit).toEqual(819.00);
     expect(newState.barSales).toEqual(1074);
     expect(newState.totalExpenses).toEqual(1820);
+    expect(newState.calculationType).toEqual('deposit');
+
+    const revisedState = closeoutFormReducer(newState, reviseAction);
+    revisedState.merchSales = 50;
+    expect(revisedState.totalDeposit).toEqual(0);
+    expect(revisedState.barSales).toEqual(1074);
+
+    const finalState = closeoutFormReducer(revisedState, submitAction);
+
+    expect(finalState.totalSales).toEqual(3586.73);
+    expect(finalState.totalDeposit).toEqual(809.00);
+    expect(finalState.barSales).toEqual(1074);
+    expect(finalState.totalExpenses).toEqual(1820);
+    expect(finalState.calculationType).toEqual('deposit');
   });
 });
 
 describe('state 7', () => {
   const state = closeoutTest7;
   it('should return true', () => {
-    const action = new Submit();
-    const newState = closeoutFormReducer(state, action);
+    const submitAction = new Submit();
+    const reviseAction = new Revise();
+    const newState = closeoutFormReducer(state, submitAction);
     expect(newState.totalSales).toEqual(4016.11);
     expect(newState.totalDeposit).toEqual(1312);
     expect(newState.barSales).toEqual(1035);
     expect(newState.totalExpenses).toEqual(2020);
+    expect(newState.calculationType).toEqual('bar');
+
+    closeoutFormReducer(newState, reviseAction);
+    const revisedState = closeoutFormReducer(newState, reviseAction);
+    revisedState.merchSales = 50;
+    expect(revisedState.totalDeposit).toEqual(1312);
+    expect(revisedState.barSales).toEqual(0);
+    revisedState.merchSales = 20;
+
+    const finalState = closeoutFormReducer(revisedState, submitAction);
+    expect(finalState.totalSales).toEqual(4016.11);
+    expect(finalState.totalDeposit).toEqual(1312);
+    expect(finalState.barSales).toEqual(1055);
+    expect(finalState.totalExpenses).toEqual(2020);
+    expect(finalState.calculationType).toEqual('bar');
   });
 });

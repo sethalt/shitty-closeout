@@ -113,10 +113,12 @@ export function closeoutFormReducer(state: any = initialState, action: IPayloadA
       let barSales = state.barSales;
       let totalDeposit = state.totalDeposit;
 
+      let calculationType = 'bar';
       if (state.totalDeposit && state.totalDeposit > 0) {
         barSales = calcBarSales(state);
       } else {
         totalDeposit = calcTotalDeposit(state);
+        calculationType = 'deposit';
       }
 
       const bmReceipts = calcTotalBarMerchSales(state, barSales);
@@ -139,11 +141,19 @@ export function closeoutFormReducer(state: any = initialState, action: IPayloadA
         barMerchTax: Math.round(bmTax * 100) / 100,
         totalSales: Math.round(totalSales * 100) / 100,
         totalProfit: Math.round(totalProfit * 100) / 100,
+        calculationType: calculationType,
       };
     }
 
     case CloseoutFormActions.REVISE: {
-      return { ...state, submitted: false };
+      let bar = state.barSales;
+      let totalDeposit = state.totalDeposit;
+      if (state.calculationType && state.calculationType === 'bar') {
+        bar = 0;
+      } else {
+        totalDeposit = 0;
+      }
+      return { ...state, submitted: false, barSales: bar, totalDeposit: totalDeposit };
     }
 
     default: {
